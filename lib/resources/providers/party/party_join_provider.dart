@@ -1,32 +1,31 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' show Client;
-import 'package:nonamukja/model/user/user_info.dart';
 import 'package:nonamukja/resources/service/storage_service.dart';
 
-class UserInfoProvieder {
+class PartyJoinProvider {
   Client client = Client();
   StorageService storageService = StorageService();
-  String? userId;
 
-  Future<UserInfo> userInfoProvider() async {
+  Future<Map<String, dynamic>> partyJoinProvider(int? id) async {
     Map<String, dynamic> userInfo =
         await storageService.readSecureData('token');
     String? token = userInfo['accessToken'];
-    int? userId = userInfo['userId'];
 
-    final response = await client.get(
-        Uri.parse("https://nona-muckja.clroot.io/api/v1/user/$userId"),
+    final response = await client.post(
+        Uri.parse("https://nona-muckja.clroot.io/api/v1/party/$id/join"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Bearer $token'
         });
-
     if (response.statusCode == 200) {
-      return UserInfo.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+      return {'status': response.statusCode};
     } else {
-      throw token.toString();
+      return {
+        'status': response.statusCode,
+        'message': utf8.decode(response.bodyBytes)
+      };
     }
   }
 }
