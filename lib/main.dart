@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:nonamukja/pages/user_manage.dart';
-=======
->>>>>>> fix/typo
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nonamukja/pages/user_manage.dart';
 
